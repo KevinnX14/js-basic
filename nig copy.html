@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Space Explorer</title>
+  <style>
+    /* Reset + base */
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      background: radial-gradient(ellipse at top, #0b0f2f 0%, #000 80%);
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    /* Sticky header stays on top of everything */
+    header {
+      position: sticky; top: 0; z-index: 1000;
+      text-align: center;
+      padding: 20px 16px 10px;
+      font-size: clamp(1.5rem, 2vw + 1rem, 2.2rem);
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+
+    nav { display: flex; justify-content: center; gap: 20px; margin-top: 8px; flex-wrap: wrap; }
+    nav a { color: #9ae6ff; text-decoration: none; font-size: 1rem; transition: color .2s ease; }
+    nav a:hover { color: #fff; }
+
+    /* Hero section with a non-fixed background and a fade-out at the bottom
+       to prevent it from "showing through" the next sections.  */
+    .hero {
+      position: relative; overflow: hidden;
+      display: grid; place-items: center;
+      height: min(80vh, 720px);
+      text-align: center;
+      background: url('https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?q=80&w=1600&auto=format&fit=crop') no-repeat center / cover;
+      /* Make sure the background DOES NOT stick while scrolling */
+      background-attachment: scroll;
+      isolation: isolate;
+    }
+    .hero::after {
+      content: ""; position: absolute; inset: 0;
+      /* Subtle vignette */
+      background: radial-gradient(120% 120% at 50% 10%, transparent 40%, rgba(0,0,0,.45) 80%),
+                  linear-gradient(to bottom, transparent 70%, rgba(0,0,0,.85) 100%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .hero h1 {
+      position: relative; z-index: 1;
+      font-size: clamp(1.8rem, 3vw + 1rem, 3rem);
+      padding: 12px 18px; border-radius: 14px;
+      background: rgba(0,0,0,.55);
+      box-shadow: 0 10px 25px rgba(0,0,0,.35);
+    }
+
+    /* Content sections become opaque panels so the hero doesn't "bleed" through */
+    .section {
+      padding: 42px 20px; max-width: 1200px; margin: 24px auto;
+      background: rgba(255,255,255,.03);
+      border: 1px solid rgba(255,255,255,.06);
+      border-radius: 16px; backdrop-filter: blur(6px);
+      box-shadow: 0 20px 40px rgba(0,0,0,.35);
+      /* When using in-page anchors, keep content clear of the sticky header */
+      scroll-margin-top: 88px;
+    }
+    .section h2 { margin: 0 0 10px; }
+
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 18px; }
+    .card {
+      background: rgba(255,255,255,.05);
+      padding: 18px; border-radius: 14px; text-align: center;
+      transition: transform .25s ease, box-shadow .25s ease;
+      cursor: pointer;
+      border: 1px solid rgba(255,255,255,.08);
+    }
+    .card:hover { transform: translateY(-8px); box-shadow: 0 15px 30px rgba(0,0,0,.5); }
+    .thumb { aspect-ratio: 16/10; width: 100%; border-radius: 10px; object-fit: cover; display: block; background: #0b1020; }
+    .caption { margin: 10px 0 0; opacity: .95; }
+
+    /* Tooltip for facts */
+    [data-tip] { position: relative; }
+    [data-tip]::after {
+      content: attr(data-tip); position: absolute; left: 50%; bottom: calc(100% + 8px);
+      transform: translateX(-50%);
+      background: rgba(0,0,0,.9); color: #fff;
+      padding: 8px 10px; border-radius: 8px; font-size: .9rem; opacity: 0;
+      pointer-events: none; transition: opacity .2s ease; white-space: nowrap; box-shadow: 0 8px 20px rgba(0,0,0,.35);
+    }
+    [data-tip]:hover::after, [data-tip]:focus-visible::after { opacity: 1; }
+
+    footer { text-align: center; padding: 28px 16px; color: #9ae6ff; font-size: .95rem; background: rgba(0,0,0,.6); border-top: 1px solid rgba(255,255,255,.08); }
+  </style>
+</head>
+<body>
+  <header>
+    Space Explorer
+    <nav>
+      <a href="#galaxies">Galaxies</a>
+      <a href="#blackholes">Black Holes</a>
+      <a href="#astronomers">Astronomers</a>
+    </nav>
+  </header>
+
+  <section class="hero" aria-label="Hero">
+    <h1>Discover the Wonders of the Universe</h1>
+  </section>
+
+  <section id="galaxies" class="section">
+    <h2>Galaxies</h2>
+    <div class="cards">
+      <div class="card" data-tip="The Milky Way is our home galaxy.">
+        <img class="thumb" src="https://tse2.mm.bing.net/th/id/OIP.mxxpAW2yHx9JD7THNMSEoQHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3=1200&auto=format&fit=crop" alt="The Milky Way galaxy" loading="lazy" />
+        <p class="caption">Milky Way</p>
+      </div>
+      <div class="card" data-tip="Andromeda is the closest spiral galaxy to us.">
+        <img class="thumb" src="https://tse4.mm.bing.net/th/id/OIP.FJGwZNxsx8YqnOXLnssV3gHaE-?r=0&rs=1&pid=ImgDetMain&o=7&rm=3=1200&auto=format&fit=crop" alt="The Andromeda galaxy" loading="lazy" />
+        <p class="caption">Andromeda</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="blackholes" class="section">
+    <h2>Black Holes</h2>
+    <div class="cards">
+      <div class="card" data-tip="A black hole’s gravity is so strong that not even light can escape.">
+        <img class="thumb" src="https://cdna.artstation.com/p/assets/covers/images/062/275/198/large/alaskan-fx-alaskan-fx-black-hole-tut-034-4k.jpg?1682732561=1200&auto=format&fit=crop" alt="Artistic rendering of a black hole" loading="lazy" />
+        <p class="caption">Supermassive Black Hole</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="astronomers" class="section">
+    <h2>Astronomers</h2>
+    <div class="cards">
+      <div class="card" data-tip="Galileo is often called the father of observational astronomy.">
+        <img class="thumb" src="https://tse4.mm.bing.net/th/id/OIP.YCPxGZOLnmz2--hUk-CSPQAAAA?r=0&rs=1&pid=ImgDetMain&o=7&rm=3=1200&auto=format&fit=crop" alt="Astronomer observing the night sky" loading="lazy" />
+        <p class="caption">Galileo Galilei</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    Made for space lovers ✨ | Explore the cosmos
+  </footer>
+</body>
+</html>
